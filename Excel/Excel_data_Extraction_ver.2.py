@@ -69,16 +69,18 @@ def run_gui():
 
     def run_extract():
         input_dir = input_dir_var.get()
-        output_file = output_file_var.get()
         target_col = target_col_var.get().strip().upper()
         search_items = list(search_listbox.get(0, tk.END))
         match_type_jp = match_type_var.get()
         match_type = "partial" if match_type_jp == "部分一致" else "exact"
 
+        output_file_name = output_file_var.get().strip()
+        output_file_path = str(Path(input_dir) / output_file_name)  # 入力フォルダ内に作成
+
         if not input_dir:
             messagebox.showerror("エラー", "入力フォルダを指定してください")
             return
-        if not output_file:
+        if not output_file_name:
             messagebox.showerror("エラー", "出力ファイル名を入力してください")
             return
         if not target_col:
@@ -88,9 +90,9 @@ def run_gui():
             messagebox.showerror("エラー", "検索文字列を追加してください")
             return
 
-        success = extract_data_from_excels(input_dir, output_file, target_col, search_items, match_type)
+        success = extract_data_from_excels(input_dir, output_file_path, target_col, search_items, match_type)
         if success:
-            messagebox.showinfo("完了", f"抽出結果を {output_file} に保存しました")
+            messagebox.showinfo("完了", f"抽出結果を {output_file_path} に保存しました")
         else:
             messagebox.showinfo("結果なし", "一致するデータは見つかりませんでした")
 
